@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: ShoppingList API
+  version: v0.1.0
+  license:
+    name: MIT
+servers:
+  - url: https://api.zakupyapp.herokuapp.com/
+paths:
+  /v1/auth/signin:
+    post:
+      tags:
+        - Auth
+      summary: 'Sign in into system'
+      operationId: 'signIn'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthCredentialsResponse'
+        400:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        500:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  /v1/list:
+    get:
+      tags:
+        - List
+      summary: Get all shopping lists
+      description: Get all shopping lists
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MainListResponse'
+        500:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  /v1/list/{uuid}:
+    get:
+      tags:
+        - List
+      summary: Get shopping list by uuid
+      description: Get shopping list by uuid
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          example: 5dfea713-d29a-4349-9e39-2b5b13584775
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse'
+        404:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        500:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    SignInRequest:
+      description: 'Sign in request'
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@example.org
+          description: Email address
+        password:
+          type: string
+          description: Password
+      required:
+        - email
+        - password
+    Response:
+      description: 'Basic response'
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+          description: Http status code
+        message:
+          type: string
+          description: Response message
+        timestamp:
+          type: integer
+          format: int64
+          description: Response timestamp
+        success:
+          type: boolean
+          description: Response status
+      required:
+        - status
+        - message
+        - timestamp
+        - success
+    ErrorResponse:
+      type: object
+      description: 'Basic error response'
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            success:
+              description: Response status
+              type: boolean
+              default: false
+              example: false
+    ServerErrorResponse:
+      description: 'Server error response'
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+          required:
+            - status
+            - message
+            - timestamp
+            - success
+    NotFoundResponse:
+      description: 'Not found response'
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+          required:
+            - status
+            - message
+            - timestamp
+            - success
+    BadRequestResponse:
+      description: 'Bad request response'
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+          required:
+            - status
+            - message
+            - timestamp
+            - success
+    AuthCredentialsResponse:
+      description: 'Auth token response'
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              required:
+                - accessToken
+                - refreshToken
+              properties:
+                accessToken:
+                  description: Access token
+                  type: string
+                refreshToken:
+                  description: Refresh token
+                  type: string
+    MainListResponse:
+      description: 'MainListResponse'
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/MainListResponseItem'
+    ListResponse:
+      description: 'SignInResponse'
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ListResponseItem'
+    MainListResponseItem:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 2218d427-1409-42ee-9a22-7fc94b1d4312
+          description: Unique ID
+        name:
+          type: string
+          example: Purchases
+          description: Shopping list name
+        visibility:
+          type: string
+          example: PERSONAL
+          enum:
+            - PERSONAL
+            - SHARED
+        type:
+          type: string
+          example: BASIC
+          enum:
+            - BASIC
+      required:
+        - uuid
+        - name
+        - visibility
+        - type
+    ListResponseItem:
+      description: 'SignInResponse'
+      allOf:
+        - $ref: '#/components/schemas/MainListResponseItem'
+        - type: object
+          required:
+            - items
+          properties:
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    example: 2218d427-1409-42ee-9a22-7fc94b1d4312
+                    description: Unique ID
+                  name:
+                    type: string
+                    example: Bread
+                    description: Shopping list item name
+                  checked:
+                    type: boolean
+                    example: true
+                    description: Is item checked
+                required:
+                  - uuid
+                  - name
+                  - checked
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
