@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: ShoppingList API
+  title: Zakupy
   version: v0.1.0
   license:
     name: MIT
@@ -37,12 +37,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
-  /v1/list:
+  /v1/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: 'Logout from system'
+      operationId: 'logout'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        200:
+          description: 'Ok'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        400:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+  /v1/roster:
     get:
       tags:
-        - List
-      summary: Get all shopping lists
-      description: Get all shopping lists
+        - Roster
+      summary: Get all personal rosters (lists)
+      description: Get all personal rosters (lists)
       security:
         - bearerAuth: []
       responses:
@@ -51,19 +75,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MainListResponse'
+                $ref: '#/components/schemas/RosterListResponse'
         500:
           description: ERROR
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
-  /v1/list/{uuid}:
+  /v1/roster/{uuid}:
     get:
       tags:
-        - List
-      summary: Get shopping list by uuid
-      description: Get shopping list by uuid
+        - Roster
+      summary: Get detailed roster (list) by uuid
+      description: Get detailed roster (list) by uuid
       security:
         - bearerAuth: []
       parameters:
@@ -79,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListResponse'
+                $ref: '#/components/schemas/RosterResponse'
         404:
           description: ERROR
           content:
@@ -112,6 +136,13 @@ components:
       required:
         - email
         - password
+    LogoutRequest:
+      description: 'Logout request'
+      type: object
+      properties:
+        refreshToken:
+          description: $refreshToken
+          type: string
     Response:
       description: 'Basic response'
       type: object
@@ -212,8 +243,8 @@ components:
                 refreshToken:
                   description: Refresh token
                   type: string
-    MainListResponse:
-      description: 'MainListResponse'
+    RosterListResponse:
+      description: 'Roster list response'
       allOf:
         - $ref: '#/components/schemas/Response'
         - type: object
@@ -223,9 +254,9 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/MainListResponseItem'
-    ListResponse:
-      description: 'SignInResponse'
+                $ref: '#/components/schemas/RosterListItemResponse'
+    RosterResponse:
+      description: 'Roster response'
       allOf:
         - $ref: '#/components/schemas/Response'
         - type: object
@@ -233,8 +264,9 @@ components:
             - data
           properties:
             data:
-              $ref: '#/components/schemas/ListResponseItem'
-    MainListResponseItem:
+              $ref: '#/components/schemas/RosterItemResponse'
+    RosterListItemResponse:
+      description: 'Roster list item response'
       type: object
       properties:
         uuid:
@@ -261,10 +293,10 @@ components:
         - name
         - visibility
         - type
-    ListResponseItem:
-      description: 'SignInResponse'
+    RosterItemResponse:
+      description: 'Roster item response'
       allOf:
-        - $ref: '#/components/schemas/MainListResponseItem'
+        - $ref: '#/components/schemas/RosterListItemResponse'
         - type: object
           required:
             - items

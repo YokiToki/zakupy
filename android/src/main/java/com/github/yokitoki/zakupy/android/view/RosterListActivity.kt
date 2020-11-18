@@ -7,18 +7,18 @@ import dev.icerock.moko.mvvm.MvvmActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import com.github.yokitoki.zakupy.android.R
 import com.github.yokitoki.zakupy.android.BR
-import com.github.yokitoki.zakupy.android.databinding.ActivityMainListBinding
-import com.github.yokitoki.zakupy.mpp.domain.entity.MainListItem
-import com.github.yokitoki.zakupy.mpp.feature.mainlist.presentation.ListViewModel
+import com.github.yokitoki.zakupy.android.databinding.ActivityRosterListBinding
+import com.github.yokitoki.zakupy.mpp.domain.entity.Roster
+import com.github.yokitoki.zakupy.mpp.feature.roster.presentation.RosterViewModel
 
-class MainListActivity : MvvmActivity<ActivityMainListBinding, ListViewModel<MainListItem>>() {
-    override val layoutId: Int = R.layout.activity_main_list
+class RosterListActivity : MvvmActivity<ActivityRosterListBinding, RosterViewModel<Roster>>() {
+    override val layoutId: Int = R.layout.activity_roster_list
     @Suppress("UNCHECKED_CAST")
-    override val viewModelClass = ListViewModel::class.java as Class<ListViewModel<MainListItem>>
+    override val viewModelClass = RosterViewModel::class.java as Class<RosterViewModel<Roster>>
     override val viewModelVariableId: Int = BR.viewModel
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        AppComponent.factory.listFactory.createListViewModel()
+        AppComponent.factory.rosterFactory.createListViewModel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

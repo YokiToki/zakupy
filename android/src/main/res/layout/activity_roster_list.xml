@@ -4,13 +4,13 @@
 
     <data>
 
-        <import type="com.github.yokitoki.zakupy.mpp.domain.entity.MainListItem" />
+        <import type="com.github.yokitoki.zakupy.mpp.domain.entity.Roster" />
 
-        <import type="com.github.yokitoki.zakupy.mpp.feature.mainlist.presentation.ListViewModel" />
+        <import type="com.github.yokitoki.zakupy.mpp.feature.roster.presentation.RosterViewModel" />
 
         <variable
             name="viewModel"
-            type="ListViewModel&lt;MainListItem&gt;" />
+            type="RosterViewModel&lt;Roster&gt;" />
     </data>
 
     <FrameLayout

@@ -10,7 +10,7 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/DarkThemeApp">
-        <activity android:name=".view.MainListActivity">
+        <activity android:name=".view.RosterListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

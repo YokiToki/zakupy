@@ -8,7 +8,7 @@ import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParse
 import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.features.TokenFeature
 import dev.icerock.moko.network.generated.apis.AuthApi
-import dev.icerock.moko.network.generated.apis.ListApi
+import dev.icerock.moko.network.generated.apis.RosterApi
 import io.ktor.client.HttpClient
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
@@ -16,7 +16,7 @@ import io.ktor.client.features.logging.Logging
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 import com.github.yokitoki.zakupy.mpp.domain.repository.AuthRepository
-import com.github.yokitoki.zakupy.mpp.domain.repository.ListRepository
+import com.github.yokitoki.zakupy.mpp.domain.repository.RosterRepository
 import com.github.yokitoki.zakupy.mpp.domain.storage.KeyValueStorage
 
 class DomainFactory(
@@ -67,8 +67,8 @@ class DomainFactory(
         )
     }
 
-    private val listApi: ListApi by lazy {
-        ListApi(
+    private val rosterApi: RosterApi by lazy {
+        RosterApi(
             basePath = baseUrl,
             httpClient = httpClient,
             json = json
@@ -79,7 +79,7 @@ class DomainFactory(
         AuthRepository(authApi = authApi, keyValueStorage = keyValueStorage)
     }
 
-    val listRepository: ListRepository by lazy {
-        ListRepository(listApi = listApi)
+    val rosterRepository: RosterRepository by lazy {
+        RosterRepository(rosterApi = rosterApi)
     }
 }

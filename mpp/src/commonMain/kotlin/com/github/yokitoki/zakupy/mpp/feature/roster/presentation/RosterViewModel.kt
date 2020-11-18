@@ -1,4 +1,4 @@
-package com.github.yokitoki.zakupy.mpp.feature.mainlist.presentation
+package com.github.yokitoki.zakupy.mpp.feature.roster.presentation
 
 import com.github.aakira.napier.Napier
 import dev.icerock.moko.mvvm.State
@@ -9,11 +9,11 @@ import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import dev.icerock.moko.units.TableUnitItem
-import com.github.yokitoki.zakupy.mpp.feature.mainlist.model.ListSource
+import com.github.yokitoki.zakupy.mpp.feature.roster.model.RosterSource
 import kotlinx.coroutines.launch
 
-class ListViewModel<T>(
-    private val listSource: ListSource<T>,
+class RosterViewModel<T>(
+    private val rosterSource: RosterSource<T>,
     private val strings: Strings,
     private val unitsFactory: UnitsFactory<T>
 ) : ViewModel() {
@@ -43,7 +43,7 @@ class ListViewModel<T>(
         viewModelScope.launch {
             @Suppress("TooGenericExceptionCaught")
             try {
-                val items = listSource.getList()
+                val items = rosterSource.getList()
 
                 _state.value = items.asState()
             } catch (error: Throwable) {
@@ -60,7 +60,7 @@ class ListViewModel<T>(
             try {
                 _state.value = State.Loading()
 
-                val items = listSource.getList()
+                val items = rosterSource.getList()
 
                 _state.value = items.asState()
             } catch (error: Throwable) {
