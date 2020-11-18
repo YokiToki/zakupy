@@ -11,7 +11,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: 'Sign in into system'
+      summary: Sign in into system
       operationId: 'signIn'
       requestBody:
         content:
@@ -41,7 +41,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: 'Logout from system'
+      summary: Logout from system
       operationId: 'logout'
       requestBody:
         content:
@@ -66,7 +66,7 @@ paths:
       tags:
         - Roster
       summary: Get all personal rosters (lists)
-      description: Get all personal rosters (lists)
+      operationId: 'getRoster'
       security:
         - bearerAuth: []
       responses:
@@ -87,7 +87,7 @@ paths:
       tags:
         - Roster
       summary: Get detailed roster (list) by uuid
-      description: Get detailed roster (list) by uuid
+      operationId: 'getRosterDetail'
       security:
         - bearerAuth: []
       parameters:
