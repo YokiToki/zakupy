@@ -1,0 +1,3 @@
+[submodule "openapi"]
+	path = openapi
+	url = git@gist.github.com:ae7c90db32deeb69a7a1401842d69a50

@@ -105,6 +105,6 @@ val packForXcode by tasks.creating(Sync::class) {
 tasks.getByName("build").dependsOn(packForXcode)
 
 openApiGenerate {
-    inputSpec.set(file("../openapi.yml").path)
+    inputSpec.set(file("../openapi/openapi.yaml").path)
     generatorName.set("kotlin-ktor-client")
 }

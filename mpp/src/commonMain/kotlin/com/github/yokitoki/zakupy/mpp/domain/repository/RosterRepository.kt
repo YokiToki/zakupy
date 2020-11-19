@@ -6,7 +6,7 @@ import dev.icerock.moko.network.generated.apis.RosterApi
 
 class RosterRepository internal constructor(private val rosterApi: RosterApi) {
     suspend fun all(): List<Roster> {
-        return rosterApi.v1RosterGet().data.map {
+        return rosterApi.getRoster().data.map {
             it.toDomain()
         }
     }
